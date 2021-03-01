@@ -1,6 +1,13 @@
 import { Role } from '../../role/entities/role.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { PasswordEncrypter } from '../../../utils/password-encrypter';
+import { Product } from 'src/modules/product/entities/product.entity';
 
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
@@ -26,6 +33,9 @@ export class User {
 
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
+
+  @OneToMany(() => Product, (product) => product.user)
+  products: Product[];
 
   authenicate(password: string): boolean {
     return PasswordEncrypter.compare(password, this.password);
