@@ -10,6 +10,7 @@ import { RoleModule } from './modules/role/role.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
+import { UnitModule } from './modules/unit/unit.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ProductModule } from './modules/product/product.module';
     UserModule,
     AuthModule,
     ProductModule,
+    UnitModule,
   ],
   controllers: [AppController],
   providers: [AppService],
