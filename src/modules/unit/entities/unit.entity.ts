@@ -28,6 +28,6 @@ export class Unit {
   @BeforeInsert()
   @BeforeUpdate()
   codeToUppercase() {
-    this.code = this.code.trim().toUpperCase();
+    this.code = this.code.trim().toLocaleUpperCase();
   }
 }
