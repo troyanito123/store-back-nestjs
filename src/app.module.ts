@@ -11,6 +11,8 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { UnitModule } from './modules/unit/unit.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -21,11 +23,15 @@ import { UnitModule } from './modules/unit/unit.module';
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfig,
     }),
+    MulterModule.register({
+      dest: './files',
+    }),
     RoleModule,
     UserModule,
     AuthModule,
     ProductModule,
     UnitModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

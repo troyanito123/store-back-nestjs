@@ -1,0 +1,29 @@
+import { Injectable, Inject } from '@nestjs/common';
+import { Cloudinary } from './cloudinary.provider';
+import * as fs from 'fs-extra';
+import { ConfigService } from '@nestjs/config';
+import { ConfigOptions } from 'src/config/config';
+@Injectable()
+export class CloudinaryService {
+  private v2: any;
+  constructor(
+    @Inject(Cloudinary) private cloudinary,
+    private configService: ConfigService,
+  ) {
+    this.cloudinary.v2.config({
+      cloud_name: configService.get(ConfigOptions.cloudinary_name),
+      api_key: configService.get(ConfigOptions.cloudinary_api_key),
+      api_secret: configService.get(ConfigOptions.cloudinary_api_secret),
+    });
+    this.v2 = cloudinary.v2;
+  }
+  async uploadImages(images: any[]): Promise<string[]> {
+    let urls = [];
+    for (let image of images) {
+      const result = await this.v2.uploader.upload(image.path);
+      urls.push(result.secure_url);
+      await fs.unlink(image.path);
+    }
+    return urls;
+  }
+}

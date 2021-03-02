@@ -16,10 +16,13 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string;
+
   @Column({ unique: true })
   code: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 7, scale: 2, default: 0 })
   price: number;
 
   @Column()
@@ -34,12 +37,13 @@ export class Product {
   @OneToMany(() => Image, (image) => image.product, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    cascade: true,
   })
   images: Image[];
 
   @BeforeInsert()
   @BeforeUpdate()
   codeToUppercase() {
-    this.code = this.code.trim().toUpperCase();
+    this.code = this.code.trim().toLocaleUpperCase();
   }
 }
