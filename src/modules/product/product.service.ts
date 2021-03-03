@@ -1,18 +1,11 @@
-import {
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { ImagesService } from '../images/images.service';
 import { UnitService } from '../unit/unit.service';
 import { UserService } from '../user/user.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Image } from './entities/image.entity';
 import { ProductStatus } from './entities/product.entity';
-import { ImageRepository } from './image.repository';
 import { ProductRepository } from './product.repository';
 
 @Injectable()
@@ -21,7 +14,7 @@ export class ProductService {
     private productRespository: ProductRepository,
     private userService: UserService,
     private unitService: UnitService,
-    private imagesRespository: ImageRepository,
+    private imagesService: ImagesService,
     private cloudinaryService: CloudinaryService,
   ) {}
 
@@ -35,11 +28,7 @@ export class ProductService {
       const product = this.productRespository.create(createProductDto);
       product.user = await this.userService.findOne(userId);
       product.unit = await this.unitService.findOne(createProductDto.unitId);
-      const imagesDB: Image[] = [];
-      for (const url of urls) {
-        imagesDB.push(this.imagesRespository.create({ url }));
-      }
-      product.images = imagesDB;
+      product.images = this.imagesService.createImages(urls);
       return this.productRespository.save(product);
     } catch (error) {
       throw new HttpException(

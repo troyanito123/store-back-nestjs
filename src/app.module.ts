@@ -13,6 +13,7 @@ import { ProductModule } from './modules/product/product.module';
 import { UnitModule } from './modules/unit/unit.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { ImagesModule } from './modules/images/images.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MulterModule } from '@nestjs/platform-express';
     ProductModule,
     UnitModule,
     CloudinaryModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,14 +6,15 @@ import { Product } from './entities/product.entity';
 import { UserModule } from '../user/user.module';
 import { UnitModule } from '../unit/unit.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
-import { Image } from './entities/image.entity';
+import { ImagesModule } from '../images/images.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product, Image]),
+    TypeOrmModule.forFeature([Product]),
     UserModule,
     UnitModule,
     CloudinaryModule,
+    ImagesModule,
   ],
   controllers: [ProductController],
   providers: [ProductService],

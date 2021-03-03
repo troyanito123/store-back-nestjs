@@ -1,4 +1,3 @@
-import { Unit } from 'src/modules/unit/entities/unit.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -8,8 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Image } from '../../images/entities/image.entity';
+import { Unit } from '../../unit/entities/unit.entity';
 import { User } from '../../user/entities/user.entity';
-import { Image } from './image.entity';
 
 export enum ProductStatus {
   ACTIVE = 'ACTIVE',
