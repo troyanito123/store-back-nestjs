@@ -1,23 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { ImageRepository } from './image.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CreateImageDto } from './dto/create-image.dto';
 import { UpdateImageDto } from './dto/update-image.dto';
+import { ImageRepository } from './image.repository';
 import { Image } from './entities/image.entity';
+import { Product } from '../product/entities/product.entity';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { ImageInterface } from '../../utils/image.interface';
 
 @Injectable()
 export class ImagesService {
-  constructor(private imageRepository: ImageRepository) {}
+  constructor(
+    private imageRepository: ImageRepository,
+    private cloudinaryService: CloudinaryService,
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+  ) {}
 
-  create(createImageDto: CreateImageDto) {
-    return 'This action adds a new image';
-  }
-
-  findAll() {
-    return `This action returns all images`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} image`;
+  async create(createImageDto: CreateImageDto, file: ImageInterface) {
+    const url = await this.cloudinaryService.uploadImage(file);
+    const image = this.imageRepository.create({ url });
+    image.product = await this.productRepository.findOne(
+      createImageDto.productId,
+    );
+    return this.imageRepository.save(image);
   }
 
   update(id: number, updateImageDto: UpdateImageDto) {

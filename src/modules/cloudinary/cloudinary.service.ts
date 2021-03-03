@@ -3,6 +3,7 @@ import { Cloudinary } from './cloudinary.provider';
 import * as fs from 'fs-extra';
 import { ConfigService } from '@nestjs/config';
 import { ConfigOptions } from 'src/config/config';
+import { ImageInterface } from 'src/utils/image.interface';
 @Injectable()
 export class CloudinaryService {
   private v2: any;
@@ -25,5 +26,11 @@ export class CloudinaryService {
       await fs.unlink(image.path);
     }
     return urls;
+  }
+
+  async uploadImage(image: ImageInterface): Promise<string> {
+    const uploadedImage = await this.v2.uploader.upload(image.path);
+    await fs.unlink(image.path);
+    return uploadedImage.secure_url;
   }
 }

@@ -16,6 +16,7 @@ import { ImagesModule } from '../images/images.module';
     CloudinaryModule,
     ImagesModule,
   ],
+  exports: [ProductService],
   controllers: [ProductController],
   providers: [ProductService],
 })
