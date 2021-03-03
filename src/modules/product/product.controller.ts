@@ -23,6 +23,7 @@ import {
 } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
+import { FindOneProductDto } from './dto/find-one-product.dto';
 
 @Controller('product')
 @UseGuards(JwtAuthGuard)
@@ -55,17 +56,20 @@ export class ProductController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productService.findOne(+id);
+  findOne(@Param() params: FindOneProductDto) {
+    return this.productService.findOne(params.id);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productService.update(+id, updateProductDto);
+  update(
+    @Param() params: FindOneProductDto,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productService.update(params.id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productService.remove(+id);
+  remove(@Param() params: FindOneProductDto) {
+    return this.productService.remove(params.id);
   }
 }

@@ -11,6 +11,11 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Image } from './image.entity';
 
+export enum ProductStatus {
+  ACTIVE = 'ACTIVE',
+  DELETE = 'DELETE',
+}
+
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn()
@@ -27,6 +32,9 @@ export class Product {
 
   @Column()
   description: string;
+
+  @Column({ default: ProductStatus.ACTIVE })
+  status: ProductStatus;
 
   @ManyToOne(() => User, (user) => user.products)
   user: User;

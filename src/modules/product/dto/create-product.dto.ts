@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsNumberString } from 'class-validator';
 import { Unit } from '../../unit/entities/unit.entity';
-import { User } from '../../user/entities/user.entity';
 import { ExistsOnDatabase } from '../../../validations/exists-on-database';
 import { UniqueCode } from '../../../validations/unique-code';
 import { Product } from '../entities/product.entity';
