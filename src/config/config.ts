@@ -41,7 +41,8 @@ export const config = () => ({
     /** Recursos
      *  * https://typeorm.io/#/migrations
      */
-    migrationsRun: true,
+    // descomentar para mandar a produccion
+    // migrationsRun: true,
     migrations: [join(__dirname, '../database/migrations/**/*{.ts,.js}')],
     migrationsTableName: 'custom_migration_table',
     cli: {
