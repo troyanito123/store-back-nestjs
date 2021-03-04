@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { PasswordEncrypter } from '../../../utils/password-encrypter';
 import { Product } from 'src/modules/product/entities/product.entity';
+import { Order } from 'src/modules/order/entities/order.entity';
 
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
@@ -36,6 +37,9 @@ export class User {
 
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
   authenicate(password: string): boolean {
     return PasswordEncrypter.compare(password, this.password);

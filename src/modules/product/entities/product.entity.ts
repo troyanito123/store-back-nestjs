@@ -1,3 +1,4 @@
+import { Detail } from 'src/modules/order/entities/detail.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -48,6 +49,9 @@ export class Product {
     cascade: true,
   })
   images: Image[];
+
+  @OneToMany(() => Detail, (details) => details.product)
+  details: Detail[];
 
   @BeforeInsert()
   @BeforeUpdate()
