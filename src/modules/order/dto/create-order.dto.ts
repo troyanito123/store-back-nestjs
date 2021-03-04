@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumberString } from 'class-validator';
+import { IsJSON, IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class CreateOrderDto {
   @IsNumberString()
@@ -11,5 +11,6 @@ export class CreateOrderDto {
   location: string;
 
   @IsNotEmpty()
-  details: string;
+  @IsJSON()
+  detailsJson: string;
 }

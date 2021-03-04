@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Detail } from './detail.entity';
@@ -22,9 +24,22 @@ export class Order {
   @Column()
   location: string;
 
+  @Column({ default: false })
+  delivered: boolean;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
   @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
-  @OneToMany(() => Detail, (detail) => detail.order)
+  @OneToMany(() => Detail, (detail) => detail.order, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   details: Detail[];
 }
