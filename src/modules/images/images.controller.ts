@@ -19,21 +19,22 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
 import { ImageInterface } from '../../utils/image.interface';
+import { FindOneImageDto } from './dto/find-one-image.dto';
 
 @Controller('images')
 @UseGuards(JwtAuthGuard)
+@UseInterceptors(
+  FileInterceptor('image', {
+    storage: diskStorage({ destination: './files', filename: editFileName }),
+    fileFilter: imageFileFilter,
+  }),
+)
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   @Post()
   @Roles(RoleOptions.Admin)
   @UseGuards(RolesGuard)
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({ destination: './files', filename: editFileName }),
-      fileFilter: imageFileFilter,
-    }),
-  )
   create(
     @Body() createImageDto: CreateImageDto,
     @UploadedFile() file: ImageInterface,
@@ -42,12 +43,15 @@ export class ImagesController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateImageDto: UpdateImageDto) {
-    return this.imagesService.update(+id, updateImageDto);
+  update(
+    @Param() params: FindOneImageDto,
+    @UploadedFile() file: ImageInterface,
+  ) {
+    return this.imagesService.update(params.id, file);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.imagesService.remove(+id);
+  remove(@Param() params: FindOneImageDto) {
+    return this.imagesService.remove(params.id);
   }
 }

@@ -33,4 +33,19 @@ export class CloudinaryService {
     await fs.unlink(image.path);
     return uploadedImage.secure_url;
   }
+
+  async replaceImage(imageId: string, newImage: ImageInterface) {
+    const deleted = await this.v2.uploader.destroy(imageId);
+    if (deleted.result !== 'ok') {
+      return null;
+    }
+    const uploadedImage = await this.v2.uploader.upload(newImage.path);
+    await fs.unlink(newImage.path);
+    return uploadedImage.secure_url;
+  }
+
+  async deleteImage(imageId: string) {
+    const deleted = await this.v2.uploader.destroy(imageId);
+    return deleted.result === 'ok' ? true : false;
+  }
 }
