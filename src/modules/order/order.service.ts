@@ -10,6 +10,7 @@ import { User } from '../user/entities/user.entity';
 import { Detail } from './entities/detail.entity';
 import { Order } from './entities/order.entity';
 import { DetailInterface } from './details.interface';
+import { Message } from '../messages/entities/message.entity';
 
 @Injectable()
 export class OrderService {
@@ -18,6 +19,7 @@ export class OrderService {
     @InjectRepository(Detail) private detailRepository: Repository<Detail>,
     @InjectRepository(Product) private productRepository: Repository<Product>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Message) private messageRepository: Repository<Message>,
   ) {}
   async create(createOrderDto: CreateOrderDto, userId: number) {
     try {
@@ -26,6 +28,11 @@ export class OrderService {
       );
       const order = this.orderRepository.create(createOrderDto);
       order.user = await this.userRepository.findOne(userId);
+      order.messages = [
+        this.messageRepository.create({
+          body: 'Estamos procesando tu pedido, enseguida nos contactamos',
+        }),
+      ];
       const details: Detail[] = [];
       let totalConfirm = 0.0;
       for (const d of detailsPartial) {
@@ -47,7 +54,7 @@ export class OrderService {
       throw new HttpException(
         {
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: [error.detail],
+          message: [error],
           error: 'Internal server error',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -66,7 +73,13 @@ export class OrderService {
   findOne(id: number) {
     return this.orderRepository.findOne({
       where: { id },
-      relations: ['user', 'details', 'details.product', 'details.product.unit'],
+      relations: [
+        'user',
+        'messages',
+        'details',
+        'details.product',
+        'details.product.unit',
+      ],
     });
   }
 

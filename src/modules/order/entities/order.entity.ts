@@ -1,3 +1,4 @@
+import { Message } from 'src/modules/messages/entities/message.entity';
 import {
   Column,
   CreateDateColumn,
@@ -42,4 +43,11 @@ export class Order {
     onUpdate: 'CASCADE',
   })
   details: Detail[];
+
+  @OneToMany(() => Message, (message) => message.order, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  messages: Message[];
 }

@@ -11,10 +11,10 @@ import {
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleOptions, Roles } from '../auth/authorization/role.decorator';
 import { RolesGuard } from '../auth/authorization/role.guard';
+import { FindOneOrderDto } from './dto/find-one-order.dto';
 
 @Controller('order')
 @UseGuards(JwtAuthGuard)
@@ -39,8 +39,8 @@ export class OrderController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+  findOne(@Param() params: FindOneOrderDto) {
+    return this.orderService.findOne(params.id);
   }
 
   @Delete(':id')
