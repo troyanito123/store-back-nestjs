@@ -16,6 +16,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ImagesModule } from './modules/images/images.module';
 import { OrderModule } from './modules/order/order.module';
 import { MessagesModule } from './modules/messages/messages.module';
+import { ValidationModule } from './modules/validation/validation.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { MessagesModule } from './modules/messages/messages.module';
     ImagesModule,
     OrderModule,
     MessagesModule,
+    ValidationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
