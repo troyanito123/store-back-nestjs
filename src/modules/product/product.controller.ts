@@ -17,13 +17,11 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleOptions, Roles } from '../auth/authorization/role.decorator';
 import { RolesGuard } from '../auth/authorization/role.guard';
-import {
-  FileFieldsInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
 import { FindOneProductDto } from './dto/find-one-product.dto';
+import { join } from 'path';
 
 @Controller('product')
 export class ProductController {
@@ -35,7 +33,7 @@ export class ProductController {
   @UseInterceptors(
     FilesInterceptor('images', 5, {
       storage: diskStorage({
-        destination: './files',
+        destination: join(__dirname, '../../public/img/uploads'),
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,

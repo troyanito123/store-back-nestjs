@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { CreateImageDto } from './dto/create-image.dto';
-import { UpdateImageDto } from './dto/update-image.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleOptions, Roles } from '../auth/authorization/role.decorator';
 import { RolesGuard } from '../auth/authorization/role.guard';
@@ -20,12 +19,16 @@ import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
 import { ImageInterface } from '../../utils/image.interface';
 import { FindOneImageDto } from './dto/find-one-image.dto';
+import { join } from 'path';
 
 @Controller('images')
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(
   FileInterceptor('image', {
-    storage: diskStorage({ destination: './files', filename: editFileName }),
+    storage: diskStorage({
+      destination: join(__dirname, '../../public/img/uploads'),
+      filename: editFileName,
+    }),
     fileFilter: imageFileFilter,
   }),
 )
