@@ -26,13 +26,12 @@ import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
 import { FindOneProductDto } from './dto/find-one-product.dto';
 
 @Controller('product')
-@UseGuards(JwtAuthGuard)
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
   @Roles(RoleOptions.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(
     FilesInterceptor('images', 5, {
       storage: diskStorage({
@@ -61,6 +60,8 @@ export class ProductController {
   }
 
   @Put(':id')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   update(
     @Param() params: FindOneProductDto,
     @Body() updateProductDto: UpdateProductDto,
@@ -69,6 +70,8 @@ export class ProductController {
   }
 
   @Delete(':id')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param() params: FindOneProductDto) {
     return this.productService.remove(params.id);
   }
