@@ -15,12 +15,15 @@ import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
 import { FindOneUnitDto } from './dto/find-one-unit.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RoleOptions, Roles } from '../auth/authorization/role.decorator';
+import { RolesGuard } from '../auth/authorization/role.guard';
 
 @Controller('unit')
-@UseGuards(JwtAuthGuard)
 export class UnitController {
   constructor(private readonly unitService: UnitService) {}
 
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   create(@Body() createUnitDto: CreateUnitDto) {
     return this.unitService.create(createUnitDto);
@@ -32,11 +35,15 @@ export class UnitController {
   }
 
   @Get(':id')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findOne(@Param() params: FindOneUnitDto) {
     return this.unitService.findOne(params.id);
   }
 
   @Put(':id')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async update(
     @Param() params: FindOneUnitDto,
     @Body() updateUnitDto: UpdateUnitDto,
@@ -58,6 +65,8 @@ export class UnitController {
   }
 
   @Delete(':id')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param() params: FindOneUnitDto) {
     return this.unitService.remove(params.id);
   }
