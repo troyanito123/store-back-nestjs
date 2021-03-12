@@ -31,6 +31,7 @@ export class OrderService {
       order.messages = [
         this.messageRepository.create({
           body: 'Estamos procesando tu pedido, enseguida nos contactamos',
+          isAdmin: true,
         }),
       ];
       const details: Detail[] = [];
