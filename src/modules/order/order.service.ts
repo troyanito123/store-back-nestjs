@@ -79,6 +79,7 @@ export class OrderService {
         'details',
         'details.product',
         'details.product.unit',
+        'details.product.images',
       ],
     });
   }
