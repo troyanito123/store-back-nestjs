@@ -53,6 +53,8 @@ export class ProductController {
   }
 
   @Get(':id')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findOne(@Param() params: FindOneProductDto) {
     return this.productService.findOne(params.id);
   }
@@ -72,5 +74,12 @@ export class ProductController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param() params: FindOneProductDto) {
     return this.productService.remove(params.id);
+  }
+
+  @Get('admin/all')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  findAllProducts() {
+    return this.productService.findAllProduct();
   }
 }

@@ -79,4 +79,8 @@ export class ProductService {
     product.status = ProductStatus.DELETE;
     return this.productRespository.save(product);
   }
+
+  findAllProduct() {
+    return this.productRespository.find({ relations: ['images'] });
+  }
 }
