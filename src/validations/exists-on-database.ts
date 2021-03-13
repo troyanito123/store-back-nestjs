@@ -12,6 +12,9 @@ export class ExistsOnDatabaseConstraint
   implements ValidatorConstraintInterface {
   async validate(value: string, args: ValidationArguments) {
     const entity = args.object[`class_entity_${args.property}`];
+    if (!value) {
+      return false;
+    }
     if (Number.isNaN(+value)) {
       return false;
     }

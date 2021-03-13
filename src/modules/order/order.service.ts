@@ -11,6 +11,7 @@ import { Detail } from './entities/detail.entity';
 import { Order } from './entities/order.entity';
 import { DetailInterface } from './details.interface';
 import { Message } from '../messages/entities/message.entity';
+import { DeliveredDto } from './dto/delivered.dto';
 
 @Injectable()
 export class OrderService {
@@ -87,5 +88,22 @@ export class OrderService {
 
   remove(id: number) {
     return this.orderRepository.delete(id);
+  }
+
+  async changeDelivered(deliveredDto: DeliveredDto) {
+    try {
+      const order = await this.orderRepository.findOne(deliveredDto.orderId);
+      order.delivered = deliveredDto.delivered;
+      return this.orderRepository.save(order);
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: [error],
+          error: 'Internal server error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

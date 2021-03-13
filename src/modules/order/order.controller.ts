@@ -15,6 +15,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RoleOptions, Roles } from '../auth/authorization/role.decorator';
 import { RolesGuard } from '../auth/authorization/role.guard';
 import { FindOneOrderDto } from './dto/find-one-order.dto';
+import { DeliveredDto } from './dto/delivered.dto';
 
 @Controller('order')
 @UseGuards(JwtAuthGuard)
@@ -46,5 +47,12 @@ export class OrderController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.orderService.remove(+id);
+  }
+
+  @Post('delivered')
+  @Roles(RoleOptions.Admin)
+  @UseGuards(RolesGuard)
+  changeStatusDelivered(@Body() deliveredDto: DeliveredDto) {
+    return this.orderService.changeDelivered(deliveredDto);
   }
 }
