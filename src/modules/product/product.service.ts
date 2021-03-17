@@ -63,7 +63,7 @@ export class ProductService {
   ) {
     let product = await this.productRespository.findOne({
       where: { id },
-      relations: ['images'],
+      relations: ['images', 'unit'],
     });
     this.productRespository.merge(product, updateProductDto);
     product.unit = await this.unitService.findOne(updateProductDto.unitId);
