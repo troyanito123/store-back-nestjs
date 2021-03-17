@@ -62,11 +62,21 @@ export class ProductController {
   @Put(':id')
   @Roles(RoleOptions.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(
+    FilesInterceptor('images', 5, {
+      storage: diskStorage({
+        destination: join(__dirname, '../../public/img/uploads'),
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
   update(
     @Param() params: FindOneProductDto,
     @Body() updateProductDto: UpdateProductDto,
+    @UploadedFiles() files,
   ) {
-    return this.productService.update(params.id, updateProductDto);
+    return this.productService.update(params.id, updateProductDto, files);
   }
 
   @Delete(':id')

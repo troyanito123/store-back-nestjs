@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Cloudinary } from './cloudinary.provider';
 import * as fs from 'fs-extra';
 import { ConfigService } from '@nestjs/config';
@@ -19,13 +19,24 @@ export class CloudinaryService {
     this.v2 = cloudinary.v2;
   }
   async uploadImages(images: any[]): Promise<string[]> {
-    let urls = [];
-    for (let image of images) {
-      const result = await this.v2.uploader.upload(image.path);
-      urls.push(result.secure_url);
-      await fs.unlink(image.path);
+    try {
+      let urls = [];
+      for (let image of images) {
+        const result = await this.v2.uploader.upload(image.path);
+        urls.push(result.secure_url);
+        await fs.unlink(image.path);
+      }
+      return urls;
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: [error.detail],
+          error: 'Internal server error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    return urls;
   }
 
   async uploadImage(image: ImageInterface): Promise<string> {

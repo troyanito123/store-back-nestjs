@@ -56,10 +56,24 @@ export class ProductService {
     });
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto) {
-    let product = await this.productRespository.findOne(id);
+  async update(
+    id: number,
+    updateProductDto: UpdateProductDto,
+    images: Express.Multer.File[],
+  ) {
+    let product = await this.productRespository.findOne({
+      where: { id },
+      relations: ['images'],
+    });
     this.productRespository.merge(product, updateProductDto);
     product.unit = await this.unitService.findOne(updateProductDto.unitId);
+    if (images.length > 1) {
+      const urls = await this.cloudinaryService.uploadImages(images);
+      const imagesProduct = this.imagesService.createImages(urls);
+      for (const imageProduct of imagesProduct) {
+        product.images.push(imageProduct);
+      }
+    }
     try {
       return await this.productRespository.save(product);
     } catch (error) {
