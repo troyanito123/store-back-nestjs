@@ -67,7 +67,7 @@ export class ProductService {
     });
     this.productRespository.merge(product, updateProductDto);
     product.unit = await this.unitService.findOne(updateProductDto.unitId);
-    if (images.length > 1) {
+    if (images.length > 0) {
       const urls = await this.cloudinaryService.uploadImages(images);
       const imagesProduct = this.imagesService.createImages(urls);
       for (const imageProduct of imagesProduct) {
