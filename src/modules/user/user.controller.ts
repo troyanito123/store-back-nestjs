@@ -9,6 +9,7 @@ import {
   HttpException,
   HttpStatus,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 import { RoleOptions, Roles } from '../auth/authorization/role.decorator';
 import { RolesGuard } from '../auth/authorization/role.guard';
+import { UpdatePushIdDto } from './dto/update_push_id.dto';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
@@ -73,5 +75,10 @@ export class UserController {
   @UseGuards(RolesGuard)
   remove(@Param() params: FindOneUserDto) {
     return this.userService.remove(params.id);
+  }
+
+  @Post('push')
+  updatePushId(@Request() req, @Body() updatePushId: UpdatePushIdDto) {
+    return this.userService.updatePushId(updatePushId, req.user);
   }
 }

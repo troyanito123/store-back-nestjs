@@ -3,6 +3,7 @@ import { PasswordEncrypter } from 'src/utils/password-encrypter';
 import { RoleCode, RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePushIdDto } from './dto/update_push_id.dto';
 import { UserStatus } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 
@@ -49,6 +50,15 @@ export class UserService {
     } catch (error) {
       return null;
     }
+  }
+
+  async updatePushId(updatePushIdDto: UpdatePushIdDto, userToken: any) {
+    const {} = userToken;
+    const user = await this.userRepository.findOne(userToken.id);
+    user.push_id = updatePushIdDto.pushId;
+    const userDB = await this.userRepository.save(user);
+    const { password, status, ...data } = userDB;
+    return data;
   }
 
   async remove(id: number) {
