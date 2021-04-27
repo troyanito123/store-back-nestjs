@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PasswordEncrypter } from 'src/utils/password-encrypter';
+import { RoleOptions } from '../auth/authorization/role.decorator';
 import { RoleCode, RoleService } from '../role/role.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -59,6 +60,11 @@ export class UserService {
     const userDB = await this.userRepository.save(user);
     const { password, status, ...data } = userDB;
     return data;
+  }
+
+  async findAdmin() {
+    const role = await this.roleService.findByCode(RoleOptions.Admin);
+    return this.userRepository.find({ where: { role: role.id } });
   }
 
   async remove(id: number) {
