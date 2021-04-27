@@ -12,6 +12,7 @@ import { Order } from './entities/order.entity';
 import { DetailInterface } from './details.interface';
 import { Message } from '../messages/entities/message.entity';
 import { DeliveredDto } from './dto/delivered.dto';
+import { OrderGateway } from '../socket/order.gateway';
 
 @Injectable()
 export class OrderService {
@@ -21,6 +22,7 @@ export class OrderService {
     @InjectRepository(Product) private productRepository: Repository<Product>,
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
+    private orderGateway: OrderGateway,
   ) {}
   async create(createOrderDto: CreateOrderDto, userId: number) {
     try {
@@ -51,7 +53,9 @@ export class OrderService {
       }
       order.total = totalConfirm;
       order.details = details;
-      return this.orderRepository.save(order);
+      const newOrder = await this.orderRepository.save(order);
+      this.orderGateway.server.emit('new-order', newOrder);
+      return newOrder;
     } catch (error) {
       throw new HttpException(
         {

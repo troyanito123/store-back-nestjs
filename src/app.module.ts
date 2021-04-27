@@ -17,6 +17,7 @@ import { ImagesModule } from './modules/images/images.module';
 import { OrderModule } from './modules/order/order.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { ValidationModule } from './modules/validation/validation.module';
+import { SocketModule } from './modules/socket/socket.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { ValidationModule } from './modules/validation/validation.module';
     OrderModule,
     MessagesModule,
     ValidationModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
