@@ -8,11 +8,13 @@ import { Product } from '../product/entities/product.entity';
 import { User } from '../user/entities/user.entity';
 import { Message } from '../messages/entities/message.entity';
 import { SocketModule } from '../socket/socket.module';
+import { OnesignalModule } from '../onesignal/onesignal.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order, Detail, Product, User, Message]),
     SocketModule,
+    OnesignalModule,
   ],
   controllers: [OrderController],
   providers: [OrderService],

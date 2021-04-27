@@ -18,6 +18,7 @@ import { OrderModule } from './modules/order/order.module';
 import { MessagesModule } from './modules/messages/messages.module';
 import { ValidationModule } from './modules/validation/validation.module';
 import { SocketModule } from './modules/socket/socket.module';
+import { OnesignalModule } from './modules/onesignal/onesignal.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { SocketModule } from './modules/socket/socket.module';
     MessagesModule,
     ValidationModule,
     SocketModule,
+    OnesignalModule,
   ],
   controllers: [AppController],
   providers: [AppService],

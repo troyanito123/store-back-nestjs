@@ -11,6 +11,8 @@ export enum ConfigOptions {
   defaultUserName = 'defaultUserName',
   defaultUserEmail = 'defaultUserEmail',
   defaultUserPassword = 'defaultUserPassword',
+  onesignalAppId = 'onesignalAppId',
+  onesignalRestApiKey = 'onesignalRestApiKey',
 }
 
 export const config = () => ({
@@ -23,6 +25,8 @@ export const config = () => ({
   defaultUserName: process.env.DEFAULT_USER_NAME,
   defaultUserEmail: process.env.DEFAULT_USER_EMAIL,
   defaultUserPassword: process.env.DEFAULT_USER_PASSWORD,
+  onesignalAppId: process.env.ONESIGNAL_APP_ID,
+  onesignalRestApiKey: process.env.ONESIGNAL_REST_API_KEY,
   database: {
     type: 'postgres',
     // descomentar para mandar a produccion

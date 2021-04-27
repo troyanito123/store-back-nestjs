@@ -13,6 +13,7 @@ import { DetailInterface } from './details.interface';
 import { Message } from '../messages/entities/message.entity';
 import { DeliveredDto } from './dto/delivered.dto';
 import { OrderGateway } from '../socket/order.gateway';
+import { OnesignalService } from '../onesignal/onesignal.service';
 
 @Injectable()
 export class OrderService {
@@ -23,6 +24,7 @@ export class OrderService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Message) private messageRepository: Repository<Message>,
     private orderGateway: OrderGateway,
+    private onesiganlService: OnesignalService,
   ) {}
   async create(createOrderDto: CreateOrderDto, userId: number) {
     try {
@@ -55,6 +57,7 @@ export class OrderService {
       order.details = details;
       const newOrder = await this.orderRepository.save(order);
       this.orderGateway.server.emit('new-order', newOrder);
+      this.onesiganlService.createOrderNotificationForAdmin(newOrder);
       return newOrder;
     } catch (error) {
       throw new HttpException(
