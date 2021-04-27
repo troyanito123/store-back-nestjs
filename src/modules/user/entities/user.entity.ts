@@ -32,6 +32,9 @@ export class User {
   @Column({ default: UserStatus.ACTIVE })
   status: UserStatus;
 
+  @Column({ nullable: true })
+  push_id: string;
+
   @ManyToOne(() => Role, (role) => role.users)
   role: Role;
 
