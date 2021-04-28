@@ -29,7 +29,7 @@ export class OnesignalService {
     const admins = await this.userService.findAdmin();
     const adminIds = admins
       .map((a) => a.push_id)
-      .filter((a) => a !== null && a !== '');
+      .filter((a) => a !== null && a !== '' && a !== 'no-push-id');
     const input = new NotificationByDeviceBuilder()
       .setIncludePlayerIds(adminIds)
       .notification() // .email()
