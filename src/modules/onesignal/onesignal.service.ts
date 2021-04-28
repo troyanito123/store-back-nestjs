@@ -24,8 +24,8 @@ export class OnesignalService {
   }
 
   async createOrderNotificationForAdmin(order: Order) {
-    const enMessage = `A new order has been created. At a cost of Bs ${order.total} without shipping, click here to view the order.`;
-    const esMessage = `Se ha creado un nuevo pedido. Con un costo Bs ${order.total} sin envío, haga clic aquí para ver el pedido.`;
+    const enMessage = `Has a cost of Bs ${order.total} without shipping, click here to view the order.`;
+    const esMessage = `Tiene un costo Bs ${order.total} sin envío, haga clic aquí para ver el pedido.`;
     const admins = await this.userService.findAdmin();
     const adminIds = admins
       .map((a) => a.push_id)
@@ -33,6 +33,10 @@ export class OnesignalService {
     const input = new NotificationByDeviceBuilder()
       .setIncludePlayerIds(adminIds)
       .notification() // .email()
+      .setHeadings({
+        en: 'A new order has been created!',
+        es: 'Se ha creado un nuevo pedido!',
+      })
       .setContents({ en: enMessage, es: esMessage })
       .setSubtitle({ en: 'El licorcito feliz', es: 'El licorcito feliz' })
       .setAttachments({ data: { orderId: order.id } })
