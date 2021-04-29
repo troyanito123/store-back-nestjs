@@ -25,6 +25,9 @@ export class Order {
   @Column()
   location: string;
 
+  @Column({ default: true })
+  is_new: boolean;
+
   @Column({ default: false })
   delivered: boolean;
 
