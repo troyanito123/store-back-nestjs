@@ -34,6 +34,9 @@ export class Product {
   @Column()
   description: string;
 
+  @Column({ default: true })
+  is_new: boolean;
+
   @Column({ default: ProductStatus.ACTIVE })
   status: ProductStatus;
 
