@@ -73,11 +73,14 @@ export class OrderService {
   }
 
   findAll() {
-    return this.orderRepository.find();
+    return this.orderRepository.find({ order: { created_at: 'DESC' } });
   }
 
   findAllByUser(userId: number) {
-    return this.orderRepository.find({ where: { user: userId } });
+    return this.orderRepository.find({
+      where: { user: userId },
+      order: { created_at: 'DESC' },
+    });
   }
 
   findOne(id: number) {
