@@ -17,6 +17,7 @@ import { RolesGuard } from '../auth/authorization/role.guard';
 import { FindOneOrderDto } from './dto/find-one-order.dto';
 import { DeliveredDto } from './dto/delivered.dto';
 import { ChangeIsNewDto } from './dto/change-isNew.dto';
+import { ChangeStatusDto } from './dto/change-status.dto';
 
 @Controller('order')
 @UseGuards(JwtAuthGuard)
@@ -57,8 +58,8 @@ export class OrderController {
     return this.orderService.changeDelivered(deliveredDto);
   }
 
-  @Put('change/isnew')
-  changeIsNew(@Body() changeIsNewDto: ChangeIsNewDto) {
-    return this.orderService.changeIsNew(changeIsNewDto);
+  @Put('change/status')
+  changeStatus(@Body() changeStatusDto: ChangeStatusDto) {
+    return this.orderService.changeStatus(changeStatusDto);
   }
 }

@@ -15,6 +15,7 @@ import { DeliveredDto } from './dto/delivered.dto';
 import { OrderGateway } from '../socket/order.gateway';
 import { OnesignalService } from '../onesignal/onesignal.service';
 import { ChangeIsNewDto } from './dto/change-isNew.dto';
+import { ChangeStatusDto } from './dto/change-status.dto';
 
 @Injectable()
 export class OrderService {
@@ -118,9 +119,9 @@ export class OrderService {
     }
   }
 
-  async changeIsNew(isNewDto: ChangeIsNewDto) {
-    const order = await this.orderRepository.findOne(isNewDto.productId);
-    order.is_new = isNewDto.isNew;
+  async changeStatus(changeStatusDto: ChangeStatusDto) {
+    const order = await this.orderRepository.findOne(changeStatusDto.orderId);
+    order.status = changeStatusDto.status;
     try {
       return this.orderRepository.save(order);
     } catch (error) {
