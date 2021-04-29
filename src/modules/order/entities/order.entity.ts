@@ -11,6 +11,12 @@ import {
 import { User } from '../../user/entities/user.entity';
 import { Detail } from './detail.entity';
 
+export enum OrderStatus {
+  new = 'NEW',
+  pending = 'PENDING',
+  delivered = 'DELIVERED',
+}
+
 @Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn()
@@ -30,6 +36,9 @@ export class Order {
 
   @Column({ default: false })
   delivered: boolean;
+
+  @Column({ default: OrderStatus.new })
+  status: OrderStatus;
 
   @CreateDateColumn()
   created_at: Date;
