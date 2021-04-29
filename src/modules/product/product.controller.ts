@@ -22,6 +22,7 @@ import { diskStorage } from 'multer';
 import { editFileName, imageFileFilter } from 'src/utils/file-upload.utils';
 import { FindOneProductDto } from './dto/find-one-product.dto';
 import { join } from 'path';
+import { IsNewDto } from './dto/is-new.dto';
 
 @Controller('product')
 export class ProductController {
@@ -91,5 +92,11 @@ export class ProductController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   findAllProducts() {
     return this.productService.findAllProduct();
+  }
+
+  @Put('change/isnew')
+  @UseGuards(JwtAuthGuard)
+  updateIsNew(@Body() isNewDto: IsNewDto) {
+    return this.productService.updateIsNew(isNewDto);
   }
 }

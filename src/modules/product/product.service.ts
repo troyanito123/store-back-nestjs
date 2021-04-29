@@ -4,6 +4,7 @@ import { ImagesService } from '../images/images.service';
 import { UnitService } from '../unit/unit.service';
 import { UserService } from '../user/user.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { IsNewDto } from './dto/is-new.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductStatus } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
@@ -96,5 +97,22 @@ export class ProductService {
 
   findAllProduct() {
     return this.productRespository.find({ relations: ['images'] });
+  }
+
+  async updateIsNew(isNewDto: IsNewDto) {
+    const product = await this.productRespository.findOne(isNewDto.productId);
+    product.is_new = isNewDto.isNew;
+    try {
+      return this.productRespository.save(product);
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: [error],
+          error: 'Internal server error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
