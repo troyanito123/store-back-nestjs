@@ -14,6 +14,7 @@ import { Message } from '../messages/entities/message.entity';
 import { DeliveredDto } from './dto/delivered.dto';
 import { OrderGateway } from '../socket/order.gateway';
 import { OnesignalService } from '../onesignal/onesignal.service';
+import { ChangeIsNewDto } from './dto/change-isNew.dto';
 
 @Injectable()
 export class OrderService {
@@ -101,6 +102,23 @@ export class OrderService {
     try {
       const order = await this.orderRepository.findOne(deliveredDto.orderId);
       order.delivered = deliveredDto.delivered;
+      return this.orderRepository.save(order);
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: [error],
+          error: 'Internal server error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async changeIsNew(isNewDto: ChangeIsNewDto) {
+    const order = await this.orderRepository.findOne(isNewDto.productId);
+    order.is_new = isNewDto.isNew;
+    try {
       return this.orderRepository.save(order);
     } catch (error) {
       throw new HttpException(
