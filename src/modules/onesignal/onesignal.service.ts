@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   OneSignalAppClient,
@@ -8,6 +8,7 @@ import {
 import { ConfigOptions } from 'src/config/config';
 import { Order } from '../order/entities/order.entity';
 import { UserService } from '../user/user.service';
+import { NotificationUserDto } from './dto/notification-user.dto';
 
 @Injectable()
 export class OnesignalService {
@@ -42,5 +43,32 @@ export class OnesignalService {
       .setAttachments({ data: { orderId: order.id } })
       .build();
     return this.client.createNotification(input);
+  }
+
+  async notificationUser(notificationUser: NotificationUserDto) {
+    const user = await this.userService.findOne(notificationUser.userId);
+    if (user.push_id) {
+      const input = new NotificationByDeviceBuilder()
+        .setIncludePlayerIds([user.push_id])
+        .notification() // .email()
+        .setHeadings({
+          en: notificationUser.title,
+          es: notificationUser.title,
+        })
+        .setContents({ en: notificationUser.body, es: notificationUser.body })
+        .setSubtitle({ en: 'El licorcito feliz', es: 'El licorcito feliz' })
+        .setAttachments({ data: { orderId: notificationUser.orderId } })
+        .build();
+      return input;
+    } else {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.NOT_FOUND,
+          message: ['No se puede mandar push notification a este usuario'],
+          error: 'Not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
