@@ -47,7 +47,11 @@ export class OnesignalService {
 
   async notificationUser(notificationUser: NotificationUserDto) {
     const user = await this.userService.findOne(notificationUser.userId);
-    if (user.push_id) {
+    if (
+      user.push_id !== null &&
+      user.push_id !== 'no-push-id' &&
+      user.push_id !== ''
+    ) {
       const input = new NotificationByDeviceBuilder()
         .setIncludePlayerIds([user.push_id])
         .notification() // .email()
