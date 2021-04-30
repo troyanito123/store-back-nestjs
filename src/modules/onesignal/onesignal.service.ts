@@ -63,7 +63,7 @@ export class OnesignalService {
         .setSubtitle({ en: 'El licorcito feliz', es: 'El licorcito feliz' })
         .setAttachments({ data: { orderId: notificationUser.orderId } })
         .build();
-      return input;
+      return this.client.createNotification(input);
     } else {
       throw new HttpException(
         {
