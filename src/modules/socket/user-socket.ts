@@ -2,15 +2,15 @@ export class UserSocket {
   databaseId: number;
   socketId: string;
   name: string;
+  role: string;
 
-  constructor(socketId: string, databaseId?: number, name?: string) {
+  constructor(socketId: string) {
     this.socketId = socketId;
-    this.databaseId = databaseId || null;
-    this.name = name || null;
   }
 
-  register(databaseId: number, name: string) {
+  register(databaseId: number, name: string, role: string) {
     this.databaseId = databaseId;
     this.name = name;
+    this.role = role;
   }
 }

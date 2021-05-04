@@ -18,10 +18,15 @@ export class UsersOnline {
     this._list.push(new UserSocket(socketId));
   }
 
-  registerUser(socketId: string, databaseId: number, name: string) {
+  registerUser(
+    socketId: string,
+    databaseId: number,
+    name: string,
+    role: string,
+  ) {
     this._list = this._list.map((u) => {
       if (u.socketId === socketId) {
-        u.register(databaseId, name);
+        u.register(databaseId, name, role);
       }
       return u;
     });

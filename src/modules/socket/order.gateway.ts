@@ -28,8 +28,17 @@ export class OrderGateway {
     this.userOnline.addToList(client.id);
   }
   @SubscribeMessage('login')
-  handleMessage(client: Socket, payload: { id: number; name: string }): void {
-    this.userOnline.registerUser(client.id, payload.id, payload.name);
+  handleMessage(
+    client: Socket,
+    payload: { id: number; name: string; role: string },
+  ): void {
+    const data = payload[0];
+    this.userOnline.registerUser(client.id, data.id, data.name, data.role);
+    this.logger.log(`SocketId: ${client.id} is for user with id ${data.id}`);
+    if (data.role === 'ADMIN') {
+      console.log('este es admin');
+      client.join('admin');
+    }
     client.emit('resp-login', {
       ok: true,
       message: `Your socket id is: ${client.id}`,
