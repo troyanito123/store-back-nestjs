@@ -22,34 +22,33 @@ import { RolesGuard } from '../auth/authorization/role.guard';
 import { UpdatePushIdDto } from './dto/update_push_id.dto';
 
 @Controller('user')
-@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   @Roles(RoleOptions.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Get()
   @Roles(RoleOptions.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findAll() {
     return this.userService.findAll();
   }
 
   @Get(':id')
   @Roles(RoleOptions.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   findOne(@Param() params: FindOneUserDto) {
     return this.userService.findOne(params.id);
   }
 
   @Put(':id')
   @Roles(RoleOptions.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   async update(
     @Param() params: FindOneUserDto,
     @Body() updateUserDto: UpdateUserDto,
@@ -72,13 +71,19 @@ export class UserController {
 
   @Delete(':id')
   @Roles(RoleOptions.Admin)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   remove(@Param() params: FindOneUserDto) {
     return this.userService.remove(params.id);
   }
 
   @Post('push')
+  @UseGuards(JwtAuthGuard)
   updatePushId(@Request() req, @Body() updatePushId: UpdatePushIdDto) {
     return this.userService.updatePushId(updatePushId, req.user);
+  }
+
+  @Delete('push/:id')
+  deletedPushId(@Param() params: FindOneUserDto) {
+    return this.userService.deletedPushId(params.id);
   }
 }

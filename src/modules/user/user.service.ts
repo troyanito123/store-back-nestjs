@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PasswordEncrypter } from 'src/utils/password-encrypter';
 import { RoleOptions } from '../auth/authorization/role.decorator';
 import { RoleCode, RoleService } from '../role/role.service';
@@ -54,12 +54,32 @@ export class UserService {
   }
 
   async updatePushId(updatePushIdDto: UpdatePushIdDto, userToken: any) {
-    const {} = userToken;
     const user = await this.userRepository.findOne(userToken.id);
     user.push_id = updatePushIdDto.pushId;
     const userDB = await this.userRepository.save(user);
     const { password, status, ...data } = userDB;
     return data;
+  }
+
+  async deletedPushId(id: number) {
+    const user = await this.userRepository.findOne(id);
+    user.push_id = 'no-push-id';
+    try {
+      const userDB = await this.userRepository.save(user);
+      const { password, status, ...data } = userDB;
+      return data;
+    } catch (error) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: [
+            `Error the pushId on the user: ${user.email} not be deleted. try again!`,
+          ],
+          error: 'Bad request',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findAdmin() {
